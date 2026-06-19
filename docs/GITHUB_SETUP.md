@@ -1,6 +1,6 @@
-# GitHub Setup
+# Thiết lập GitHub
 
-May hien tai da co local Git repo va cac branch:
+Máy hiện tại đã có local Git repo và các branch:
 
 ```text
 main
@@ -11,25 +11,25 @@ Hung
 Khoa
 ```
 
-## Cach tao repo tren GitHub
+## Cách tạo repo trên GitHub
 
-1. Vao GitHub va tao repo moi.
-2. Ten repo de xuat:
+1. Vào GitHub và tạo repo mới.
+2. Tên repo đề xuất:
 
 ```text
 oil-spill-sar-segmentation
 ```
 
-3. Khong chon tao san `README`, `.gitignore` hoac license vi local repo da co cac file nay.
-4. Sau khi tao repo, copy URL dang HTTPS, vi du:
+3. Không chọn tạo sẵn `README`, `.gitignore` hoặc license vì local repo đã có các file này.
+4. Sau khi tạo repo, copy URL dạng HTTPS, ví dụ:
 
 ```text
 https://github.com/<username>/oil-spill-sar-segmentation.git
 ```
 
-## Ket noi local repo voi GitHub
+## Kết nối local repo với GitHub
 
-Thay `<repo-url>` bang URL GitHub vua tao:
+Thay `<repo-url>` bằng URL GitHub vừa tạo:
 
 ```bash
 git remote add origin <repo-url>
@@ -41,9 +41,9 @@ git push -u origin Hung
 git push -u origin Khoa
 ```
 
-## Neu da cai GitHub CLI
+## Nếu đã cài GitHub CLI
 
-Co the tao repo va push bang:
+Có thể tạo repo và push bằng:
 
 ```bash
 gh repo create oil-spill-sar-segmentation --private --source=. --remote=origin --push
@@ -54,5 +54,5 @@ git push -u origin Hung
 git push -u origin Khoa
 ```
 
-Neu muon repo public, doi `--private` thanh `--public`.
+Nếu muốn repo public, đổi `--private` thành `--public`.
 

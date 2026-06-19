@@ -1,42 +1,42 @@
 # Dataset
 
-Khong commit dataset truc tiep vao repo.
+Không commit dataset trực tiếp vào repo.
 
 ## Link dataset
 
-Them link dataset vao day:
+Thêm link dataset vào đây:
 
 ```text
-Dataset source:
+Nguồn dataset:
 Google Drive/Kaggle/Hugging Face:
 ```
 
-## Cau truc dataset de xuat
+## Cấu trúc dataset đề xuất
 
 ```text
 data/
-├── raw/
-│   ├── images/
-│   └── masks/
-└── processed/
-    ├── train/
-    │   ├── images/
-    │   └── masks/
-    ├── val/
-    │   ├── images/
-    │   └── masks/
-    └── test/
-        ├── images/
-        └── masks/
+|-- raw/
+|   |-- images/
+|   `-- masks/
+`-- processed/
+    |-- train/
+    |   |-- images/
+    |   `-- masks/
+    |-- val/
+    |   |-- images/
+    |   `-- masks/
+    `-- test/
+        |-- images/
+        `-- masks/
 ```
 
-## Chuan tien xu ly
+## Chuẩn tiền xử lý
 
-Can thong nhat:
+Cả nhóm cần thống nhất:
 
-- Image size: `256x256` hoac `512x512`.
-- Cach normalize anh SAR.
-- Cach doc mask ground truth.
-- Ti le chia train/val/test.
-- Augmentation co dung hay khong.
+- Kích thước ảnh: `256x256` hoặc `512x512`.
+- Cách normalize ảnh SAR.
+- Cách đọc mask ground truth.
+- Tỉ lệ chia train/val/test.
+- Có dùng augmentation hay không.
 

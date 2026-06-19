@@ -1,26 +1,26 @@
-# Team Notes
+# Ghi chú cho nhóm
 
-Doc file nay truoc khi bat dau code.
+Đọc file này trước khi bắt đầu code.
 
-## Nguyen tac chung
+## Nguyên tắc chung
 
-- Khong sua code cua thanh vien khac neu chua trao doi.
-- Khong commit dataset lon, weight lon, file cache hoac thu muc moi truong ao.
-- Moi model phai co config, cach train, cach inference va ket qua metric rieng.
-- Moi thay doi anh huong den preprocessing, input size, output format phai bao ca nhom.
+- Không sửa code của thành viên khác nếu chưa trao đổi trước.
+- Không commit dataset lớn, file weight lớn, file cache hoặc thư mục môi trường ảo.
+- Mỗi model phải có config, cách train, cách inference và kết quả metric riêng.
+- Mọi thay đổi ảnh hưởng đến preprocessing, input size hoặc output format phải báo cả nhóm.
 
 ## Branch
 
 ```text
-main     : ban nop/demo on dinh
-develop  : ban tich hop chung
-app      : app demo va inference tong hop
-Quang    : phan viec cua Quang
-Hung     : phan viec cua Hung
-Khoa     : phan viec cua Khoa
+main     : bản nộp/demo ổn định
+develop  : bản tích hợp chung
+app      : app demo và inference tổng hợp
+Quang    : phần việc của Quang
+Hung     : phần việc của Hưng
+Khoa     : phần việc của Khoa
 ```
 
-Lenh lam viec co ban:
+Lệnh làm việc cơ bản:
 
 ```bash
 git checkout develop
@@ -28,14 +28,14 @@ git pull
 git checkout -b Quang
 ```
 
-Neu branch da ton tai:
+Nếu branch đã tồn tại:
 
 ```bash
 git checkout Quang
 git pull
 ```
 
-Commit:
+Commit và push:
 
 ```bash
 git add .
@@ -43,7 +43,7 @@ git commit -m "train unet baseline"
 git push origin Quang
 ```
 
-## Phan cong file
+## Phân công file
 
 Quang:
 
@@ -52,7 +52,7 @@ Quang:
 - `src/models/quang_model.py`
 - `src/training/train_quang.py`
 
-Hung:
+Hưng:
 
 - `notebooks/Hung/`
 - `configs/hung.yaml`
@@ -66,35 +66,35 @@ Khoa:
 - `src/models/khoa_model.py`
 - `src/training/train_khoa.py`
 
-App / inference chung:
+App và inference chung:
 
 - `app/`
 - `src/inference/`
 - `src/utils/visualization.py`
 
-## Chuan metric
+## Chuẩn metric
 
-Moi model can bao cao toi thieu:
+Mỗi model cần báo cáo tối thiểu:
 
-| Model | Dice | IoU | Precision | Recall | Ghi chu |
+| Model | Dice | IoU | Precision | Recall | Ghi chú |
 |---|---:|---:|---:|---:|---|
 | Quang | | | | | |
-| Hung | | | | | |
+| Hưng | | | | | |
 | Khoa | | | | | |
 | Ensemble | | | | | |
 
-## Checklist truoc khi merge
+## Checklist trước khi merge
 
-- Code train chay duoc.
-- Code inference chay duoc voi mot anh test.
-- Config da duoc commit.
-- README hoac note co ghi cach chay.
-- Khong commit data/weight lon.
-- Ket qua metric duoc ghi vao `reports/results.md`.
+- Code train chạy được.
+- Code inference chạy được với một ảnh test.
+- Config đã được commit.
+- README hoặc note có ghi cách chạy.
+- Không commit data/weight lớn.
+- Kết quả metric được ghi vào `reports/results.md`.
 
-## Quy uoc commit message
+## Quy ước commit message
 
-Nen viet ngan gon theo dang:
+Nên viết ngắn gọn theo dạng:
 
 ```text
 add unet model
