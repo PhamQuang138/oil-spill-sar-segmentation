@@ -1,0 +1,34 @@
+# =====================================================
+# deep-sar-segformer — Dependencies
+# SegFormer Oil Spill Segmentation on SAR Imagery
+# =====================================================
+
+# Deep Learning framework
+torch>=2.0.0
+torchvision>=0.15.0
+
+# HuggingFace SegFormer backbone
+transformers>=4.35.0
+huggingface_hub>=0.19.0
+
+# Image I/O & processing
+opencv-python>=4.8.0
+Pillow>=10.0.0
+
+# Augmentation
+albumentations>=1.3.1
+
+# Scientific computing
+numpy>=1.24.0
+
+# Visualization
+matplotlib>=3.7.0
+
+# Progress bars
+tqdm>=4.66.0
+
+# Testing
+pytest>=7.4.0
+
+# Optional: accelerate for multi-GPU (uncomment if needed)
+# accelerate>=0.24.0
