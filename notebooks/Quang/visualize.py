@@ -158,8 +158,8 @@ def analyze_class_imbalance(sample_size=100):
     explode = (0, 0.2)  # Cắt miếng bánh "Vết dầu" ra cho nổi bật
 
     ax.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.2f%%',
-           shadow=True, startangle=140, textprops={'fontsize': 12, 'fontweight': 'bold'})
-    ax.set_title('Phân bố Dữ liệu Pixel (Class Imbalance Analysis)', fontsize=14, fontweight='bold')
+           shadow=True, startangle=100, textprops={'fontsize': 12, 'fontweight': 'bold'})
+    ax.set_title('Phân bố Dữ liệu Pixel (Class Imbalance Analysis)', fontsize=11, fontweight='bold')
 
     save_path = config.PREDICTION_DIR / '3_class_imbalance_piechart.png'
     plt.tight_layout()
