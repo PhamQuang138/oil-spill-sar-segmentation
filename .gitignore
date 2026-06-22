@@ -32,6 +32,7 @@ logs/
 #data
 data/
 data/dataset/
+dataset/
 
 # OS/editor
 .DS_Store
