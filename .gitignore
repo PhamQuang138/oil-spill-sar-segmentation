@@ -29,7 +29,9 @@ runs/
 outputs/
 logs/
 *.log
-D:/HocSAu/dataset/
+#data
+data/
+data/dataset/
 
 # OS/editor
 .DS_Store
