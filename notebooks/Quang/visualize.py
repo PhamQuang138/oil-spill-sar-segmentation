@@ -161,7 +161,7 @@ def analyze_class_imbalance(sample_size=100):
            shadow=True, startangle=100, textprops={'fontsize': 12, 'fontweight': 'bold'})
     ax.set_title('Phân bố Dữ liệu Pixel (Class Imbalance Analysis)', fontsize=11, fontweight='bold')
 
-    save_path = config.PREDICTION_DIR / '3_class_imbalance_piechart.png'
+    save_path = config.PREDICTION_DIR / 'piechart.png'
     plt.tight_layout()
     plt.savefig(save_path, dpi=200)
     print(f"  -> [OK] Đã lưu: {save_path}")
