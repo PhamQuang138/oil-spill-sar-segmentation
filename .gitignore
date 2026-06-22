@@ -29,6 +29,9 @@ runs/
 outputs/
 logs/
 *.log
+#data
+data/
+data/dataset/
 
 # OS/editor
 .DS_Store
