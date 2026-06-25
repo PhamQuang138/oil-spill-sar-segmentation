@@ -1,0 +1,41 @@
+LUONG HOAT DONG STREAMLIT APP
+
+1. Khoi dong app
+   - Lenh chay: streamlit run app/streamlit_app.py
+   - app/streamlit_app.py them thu muc goc project vao sys.path de import duoc src.
+
+2. Chon device
+   - Sidebar cho chon Auto, CPU hoac CUDA.
+   - Auto se dung CUDA neu torch.cuda.is_available(), nguoc lai dung CPU.
+
+3. Load model
+   - Ham load_models(device) duoc cache bang st.cache_resource de tranh load lai model nhieu lan.
+   - App tim weight Quang tai weights/quang_best_deeplabv3plus_checkpoint.pth.
+   - App tim weight Hung tai weights/Hung_best_segformer_checkpoint.pth.
+   - Neu load duoc it nhat 2 model, app tao them EnsemblePredictor de lay trung binh probability map.
+
+4. Upload anh
+   - Nguoi dung upload anh SAR dinh dang png, jpg, jpeg, tif hoac tiff.
+   - Anh duoc doc bang PIL, convert sang RGB, roi chuyen thanh numpy array.
+
+5. Chay du doan
+   - Khi bam nut Chay Nhan Dien, app lay predictor theo model da chon.
+   - predictor.predict(image_np, threshold) tra ve:
+     + prob_map: ban do xac suat vet dau loang, gia tri 0..1.
+     + mask: mat na nhi phan, pixel dau = 1, nen = 0.
+
+6. Tao overlay
+   - BasePredictor.generate_overlay(image_np, mask, alpha) resize anh goc ve cung kich thuoc mask.
+   - Cac pixel mask = 1 duoc to mau do va blend voi anh goc theo alpha.
+
+7. Hien thi ket qua
+   - App tinh ti le dau: mask.mean() * 100.
+   - Man hinh hien 3 cot:
+     + Anh goc.
+     + Mask du doan.
+     + Anh overlay.
+
+8. Ghi chu hien tai
+   - App hien co QuangPredictor va HungPredictor.
+   - KhoaPredictor chua co vi chua thay code model va weight cua Khoa.
+   - Ensemble hien chi duoc tao khi co tu 2 model tro len.
