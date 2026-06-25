@@ -1,11 +1,14 @@
 numpy
 opencv-python
-pillow
+Pillow
 matplotlib
-scikit-learn
 tqdm
 pyyaml
 torch
 torchvision
 streamlit
-
+segmentation-models-pytorch
+transformers>=4.35.0,<5
+huggingface_hub<1
+safetensors
+timm
