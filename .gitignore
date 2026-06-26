@@ -16,23 +16,21 @@ env/
 .ipynb_checkpoints/
 
 # Data and model artifacts
-data/raw/
-data/processed/
+data/
+dataset/
 weights/
 *.pt
 *.ckpt
 *.onnx
+**/finetune_outputs/
+**/training_log*.csv
 
 # Logs and outputs
 runs/
 outputs/
 logs/
+reports/
 *.log
-#data
-data/
-data/dataset/
-dataset/
-
 
 # OS/editor
 .DS_Store

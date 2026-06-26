@@ -12,6 +12,7 @@ LUONG HOAT DONG STREAMLIT APP
    - Ham load_models(device) duoc cache bang st.cache_resource de tranh load lai model nhieu lan.
    - App tim weight Quang tai weights/quang_best_deeplabv3plus_checkpoint.pth.
    - App tim weight Hung tai weights/Hung_best_segformer_checkpoint.pth.
+   - App tim weight Khoa tai weights/Khoa_best_Unetplusplus_checkpoint.pth.
    - Neu load duoc it nhat 2 model, app tao them EnsemblePredictor de lay trung binh probability map.
 
 4. Upload anh
@@ -36,6 +37,5 @@ LUONG HOAT DONG STREAMLIT APP
      + Anh overlay.
 
 8. Ghi chu hien tai
-   - App hien co QuangPredictor va HungPredictor.
-   - KhoaPredictor chua co vi chua thay code model va weight cua Khoa.
+   - App hien co QuangPredictor, HungPredictor va KhoaPredictor.
    - Ensemble hien chi duoc tao khi co tu 2 model tro len.
