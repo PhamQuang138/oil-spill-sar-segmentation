@@ -32,6 +32,10 @@ logs/
 reports/
 *.log
 
+# Local agent/skill files
+.agents/
+skills-lock.json
+
 # OS/editor
 .DS_Store
 Thumbs.db
