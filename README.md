@@ -1,111 +1,174 @@
-# Oil Spill SAR Segmentation
+# Phân đoạn vùng loang dầu trên ảnh SAR
 
-Project cuoi ki mon Hoc Sau: segmentation vung loang dau tren bien tu anh SAR, so sanh 3 model rieng le va tich hop vao app demo.
+Dự án xây dựng pipeline phát hiện và phân đoạn vùng nghi loang dầu trên ảnh vệ tinh SAR bằng deep learning. Hệ thống hỗ trợ chạy từng mô hình riêng lẻ hoặc ensemble, cho phép upload ảnh SAR, điều chỉnh threshold, hậu xử lý mask và hiển thị kết quả trực quan bằng Streamlit.
 
-## Muc tieu
+## Mục tiêu
 
-- Train 3 model segmentation doc lap cho bai toan phat hien vung loang dau tren anh SAR.
-- Danh gia tung model bang cac metric thong nhat: Dice, IoU, Precision, Recall.
-- Tong hop ket qua bang ensemble.
-- Xay dung app cho phep upload anh SAR, chon model, hien thi mask va overlay ket qua.
+- Phân đoạn vùng nghi loang dầu ở mức pixel trên ảnh SAR.
+- So sánh ba mô hình học sâu: DeepLabV3+, SegFormer và UNet++.
+- Chuẩn hóa đầu ra của các mô hình thành probability map để dễ tích hợp.
+- Tối ưu kết quả suy luận bằng threshold search, ensemble và hậu xử lý mask.
+- Cung cấp app demo để xem ảnh gốc, mask, probability map và overlay.
 
-## Thanh vien va nhanh lam viec
-
-| Thanh vien | Branch | Pham vi chinh |
-|---|---|---|
-| Quang | `Quang` | Model 1, training script, config va report ket qua |
-| Hung | `Hung` | Model 2, training script, config va report ket qua |
-| Khoa | `Khoa` | Model 3, training script, config va report ket qua |
-
-Nhanh tich hop:
-
-- `main`: ban on dinh de nop/demo.
-- `develop`: nhanh tong hop code tu cac thanh vien.
-- `app`: phat trien app demo va inference tich hop.
-
-Khong merge truc tiep code dang thu nghiem vao `main`.
-
-## Cau truc repo
+## Cấu trúc chính
 
 ```text
 .
-├── app/                  # Streamlit app
-├── configs/              # Config train/inference cho tung model
-├── data/                 # Huong dan dataset, khong commit data lon
-├── docs/                 # Note, ke hoach, quy uoc lam viec
-├── notebooks/            # Notebook rieng cua tung thanh vien
-├── reports/              # Bang ket qua, hinh anh, noi dung bao cao
+├── app/
+│   └── streamlit_app.py              # Giao diện demo Streamlit
+├── configs/
+│   ├── quang.yaml                    # Cấu hình tham khảo cho DeepLabV3+
+│   ├── hung.yaml                     # Cấu hình tham khảo cho SegFormer
+│   └── khoa.yaml                     # Cấu hình tham khảo cho UNet++
+├── notebooks/
+│   ├── Quang/                        # Script train/evaluate/fine-tune DeepLabV3+
+│   ├── Hung/                         # Script train/evaluate/predict SegFormer
+│   └── Khoa/                         # Checkpoint và tài nguyên UNet++
 ├── src/
-│   ├── datasets/         # Dataset va preprocessing
-│   ├── inference/        # Predict, ensemble, postprocess
-│   ├── models/           # Kien truc model
-│   ├── training/         # Script train
-│   └── utils/            # Metric, visualization, helper
-├── weights/              # Khong commit weight lon len GitHub
-├── requirements.txt
+│   ├── evaluation/
+│   │   └── development_eval.py       # Đánh giá threshold, ensemble, hậu xử lý
+│   └── inference/
+│       ├── base.py                   # Interface chung cho predictor
+│       ├── quang_adapter.py          # Adapter DeepLabV3+ ResNet34
+│       ├── hung_adapter.py           # Adapter SegFormer MiT-B0
+│       ├── khoa_adapter.py           # Adapter UNet++ EfficientNet-B4
+│       ├── ensemble.py               # Ensemble bằng trung bình probability map
+│       └── postprocess.py            # Hậu xử lý mask nhị phân
+├── weights/                          # Checkpoint mô hình, không commit lên Git
+├── requirements.txt                  # Thư viện cần cài
 └── README.md
 ```
 
-## Chuan dau vao/dau ra bat buoc
+## Mô hình
 
-Tat ca model can thong nhat interface de app co the tich hop:
+| Thành viên | Mô hình | File weight app sử dụng | Threshold mặc định |
+|---|---|---|---|
+| Quang | DeepLabV3+ ResNet34 | `weights/quang_best_deeplabv3plus_checkpoint.pth` | `0.50` |
+| Hưng | SegFormer MiT-B0 | `weights/Hung_best_segformer_checkpoint.pth` | `0.60` |
+| Khoa | UNet++ EfficientNet-B4 | `weights/Khoa_best_Unetplusplus_checkpoint.pth` | `0.65` |
+| Chung | Ensemble trung bình xác suất | Tạo từ các model load thành công | `0.50` |
 
-- Input: anh SAR da preprocess ve cung kich thuoc, vi du `256x256` hoac `512x512`.
-- Output: probability map hoac binary mask cung kich thuoc voi input.
-- Binary mask:
-  - `0`: background / bien khong co dau.
-  - `1`: vung nghi loang dau.
-- Model inference nen co ham:
+App sẽ tự tạo lựa chọn Ensemble nếu load được ít nhất hai mô hình.
 
-```python
-def load_model(weight_path: str, device: str):
-    ...
+## Cài đặt
 
-def predict(image, model, device: str, threshold: float = 0.5):
-    ...
+Khuyến nghị dùng môi trường ảo Python.
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-## Ensemble
+Nếu dùng CUDA, hãy cài bản PyTorch phù hợp với GPU trước hoặc kiểm tra lại phiên bản `torch` sau khi cài.
 
-Co the dung 1 trong 2 cach:
+## Chuẩn bị checkpoint
 
-- Majority voting: pixel nao co it nhat 2/3 model du doan la dau thi lay la dau.
-- Average probability: lay trung binh probability cua 3 model roi threshold.
+Đặt các file checkpoint vào thư mục `weights/` với đúng tên:
 
-Voi demo cuoi ki, uu tien average probability neu ca 3 model tra ve probability map.
+```text
+weights/
+├── quang_best_deeplabv3plus_checkpoint.pth
+├── Hung_best_segformer_checkpoint.pth
+└── Khoa_best_Unetplusplus_checkpoint.pth
+```
 
-## App demo
+Thư mục `weights/` không nên commit lên Git vì checkpoint thường có dung lượng lớn.
 
-App du kien dung Streamlit:
-
-- Upload anh SAR.
-- Chon model: Quang / Hung / Khoa / Ensemble.
-- Dieu chinh threshold.
-- Hien thi anh goc, mask du doan, overlay.
-- Xuat/tai mask ket qua.
-
-Chay app:
+## Chạy app demo
 
 ```bash
 streamlit run app/streamlit_app.py
 ```
 
-## Quy trinh lam viec
+Luồng sử dụng app:
 
-1. Moi thanh vien checkout branch rieng.
-2. Chi sua file trong pham vi duoc phan cong neu khong co trao doi truoc.
-3. Commit thuong xuyen voi message ro rang.
-4. Khi code chay duoc, tao Pull Request vao `develop`.
-5. Test lai inference truoc khi merge vao `develop`.
-6. Chi merge `develop` vao `main` khi da san sang demo/nop.
+1. Chọn thiết bị chạy: Auto, CPU hoặc CUDA.
+2. Chọn mô hình: DeepLabV3+, SegFormer, UNet++ hoặc Ensemble.
+3. Điều chỉnh threshold nếu cần.
+4. Bật/tắt hậu xử lý mask.
+5. Upload ảnh SAR định dạng `png`, `jpg`, `jpeg`, `tif` hoặc `tiff`.
+6. Bấm `Chạy nhận diện`.
+7. Xem ảnh gốc, mask dự đoán, overlay, probability map và raw mask.
 
-## Du lieu va weight
+## Đầu vào và đầu ra
 
-Khong commit cac file lon:
+Đầu vào app là ảnh SAR được đọc bằng PIL và chuyển về RGB.
 
-- Dataset goc.
-- Dataset processed.
-- File weight `.pt`, `.pth`, `.ckpt`.
+Mỗi predictor cần trả về:
 
-Luu dataset/weight tren Google Drive, Kaggle, Roboflow hoac Hugging Face, sau do them link vao `docs/DATASET.md`.
+- `prob_map`: ma trận xác suất lớp oil spill, giá trị trong khoảng `[0, 1]`.
+- `mask`: mask nhị phân sau threshold, trong đó `1` là vùng nghi loang dầu và `0` là nền.
 
+Overlay được tạo bằng cách tô đỏ các pixel có `mask = 1` lên ảnh gốc.
+
+## Hậu xử lý và ensemble
+
+Pipeline suy luận có các bước tối ưu sau:
+
+- **Threshold search**: chọn ngưỡng tốt nhất trên validation thay vì cố định mọi mô hình ở `0.50`.
+- **Ensemble**: lấy trung bình probability map của các mô hình đã load thành công.
+- **Post-process**: dùng morphology opening/closing và loại connected components nhỏ để giảm nhiễu mask.
+
+Các tham số hậu xử lý trong app:
+
+- `min_area`: diện tích nhỏ nhất của connected component được giữ lại.
+- `open_kernel`: kernel cho morphology opening.
+- `close_kernel`: kernel cho morphology closing.
+- `alpha`: độ đậm của overlay.
+
+## Đánh giá trên validation
+
+Script đánh giá nằm ở:
+
+```bash
+python src/evaluation/development_eval.py
+```
+
+Script này dùng checkpoint hiện có để:
+
+- Quét threshold trên validation set.
+- Tính IoU, Dice, Precision, Recall.
+- Đánh giá ensemble trung bình probability map.
+- Đánh giá hậu xử lý mask.
+- Xuất bảng kết quả và hình trực quan.
+
+Mặc định script kỳ vọng dữ liệu validation có cấu trúc:
+
+```text
+dataset/
+├── images/images/val/
+└── masks/masks/val/
+```
+
+Có thể chạy thử nhanh bằng giới hạn số ảnh:
+
+```bash
+python src/evaluation/development_eval.py --limit 32
+```
+
+## Train và fine-tune
+
+Các script huấn luyện chính nằm trong thư mục notebook của từng thành viên:
+
+- DeepLabV3+: `notebooks/Quang/train_deeplabv3plus.py`
+- Fine-tune DeepLabV3+: `notebooks/Quang/finetune_deeplabv3plus_tversky.py`
+- SegFormer: `notebooks/Hung/train.py`
+
+Nhánh fine-tune DeepLabV3+ hỗ trợ các biến thể loss như BCE+Dice, Tversky, Focal Tversky và BCE+Tversky. Mục tiêu là cải thiện cân bằng giữa false positive và false negative cho lớp oil spill vốn chiếm tỉ lệ nhỏ.
+
+## Quy ước dữ liệu và Git
+
+Không commit các dữ liệu hoặc artifact lớn:
+
+- Dataset gốc hoặc dataset đã xử lý.
+- Checkpoint `.pth`, `.pt`, `.ckpt`.
+- Log, output tạm, cache Python.
+
+Các thư mục như `data/`, `dataset/`, `weights/` được giữ local để chạy thử và demo.
+
+## Ghi chú phát triển
+
+- `src/inference/base.py` định nghĩa interface chung để app gọi mọi mô hình giống nhau.
+- Adapter của từng mô hình chịu trách nhiệm load checkpoint, preprocess ảnh và sinh probability map.
+- Ensemble chỉ phụ thuộc vào `predict_proba`, nên có thể thêm mô hình mới nếu mô hình đó tuân theo interface chung.
