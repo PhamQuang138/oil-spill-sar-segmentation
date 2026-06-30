@@ -64,7 +64,11 @@ Nếu dùng CUDA, hãy cài bản PyTorch phù hợp với GPU trước hoặc k
 
 ## Chuẩn bị checkpoint
 
-Đặt các file checkpoint vào thư mục `weights/` với đúng tên:
+Checkpoint mô hình không được commit lên Git để giữ repository và file ZIP tải từ GitHub nhẹ. Tải các checkpoint đã train từ Google Drive, sau đó đặt vào thư mục `weights/` với đúng tên:
+
+```text
+Google Drive: TODO: https://drive.google.com/drive/folders/1gGlfn9oDPecxgXpSQkkypruZ1C5bKBmS?usp=sharing
+```
 
 ```text
 weights/
@@ -73,7 +77,13 @@ weights/
 └── Khoa_best_Unetplusplus_checkpoint.pth
 ```
 
-Thư mục `weights/` không nên commit lên Git vì checkpoint thường có dung lượng lớn.
+Nếu chưa có thư mục `weights/`, tạo thủ công:
+
+```bash
+mkdir weights
+```
+
+Sau khi tải xong, kiểm tra tên file phải khớp chính xác như trên vì app Streamlit load checkpoint theo các đường dẫn này.
 
 ## Chạy app demo
 

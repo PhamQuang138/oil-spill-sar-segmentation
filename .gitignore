@@ -18,8 +18,10 @@ env/
 # Data and model artifacts
 data/
 dataset/
-weights/
+weights/*
+!weights/README.md
 *.pt
+*.pth
 *.ckpt
 *.onnx
 **/finetune_outputs/
